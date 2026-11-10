@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="topbar">
+      <div class="topbar-brand">
+        <img src="../../images/1.png" alt="CCES" style="width:32px;height:32px;max-width:32px;max-height:32px;object-fit:contain;">
+        <span>CCES Online Requisition</span>
+      </div>
+      <div style="flex:1;"></div>
+      <div class="topbar-right">
+        <span class="role-label">Role</span>
+        <span class="role-value">Registrar Office</span>
+        <a href="#" id="logoutBtnTopbar" class="topbar-logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </div>
+
+    <nav class="staff-navbar">
+      <div class="staff-navbar-inner">
+        <div class="navbar-dropdown">
+          <a href="dashboard.html" class="navbar-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        </div>
+        <div class="navbar-dropdown">
+          <a href="requests.html" class="navbar-link"><i class="fas fa-clipboard-list"></i> Requests</a>
+        </div>
+        <div class="navbar-dropdown">
+          <a href="#" class="navbar-link"><i class="fas fa-users"></i> Students <i class="fas fa-caret-down"></i></a>
+          <div class="navbar-dropdown-menu">
+            <a href="students.html"><i class="fas fa-user-graduate"></i> Students</a>
+            <a href="alumni.html"><i class="fas fa-user-tie"></i> Alumni</a>
+            <a href="archived.html"><i class="fas fa-archive"></i> Archived</a>
+          </div>
+        </div>
+        <div class="navbar-dropdown">
+          <a href="reports.html" class="navbar-link"><i class="fas fa-chart-bar"></i> Reports</a>
+        </div>
+      </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

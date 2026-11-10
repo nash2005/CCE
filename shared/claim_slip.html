@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claim Slip</title>
+  <style>
+    @media print {
+      body { margin: 0; padding: 0; }
+      .no-print { display: none !important; }
+    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+    .slip-container { max-width: 500px; margin: 0 auto; background: #fff; border: 2px solid #333; border-radius: 4px; padding: 30px; }
+    .slip-header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 15px; }
+    .slip-header h2 { margin: 0; font-size: 1.3rem; color: #333; }
+    .slip-header h3 { margin: 5px 0 0; font-size: 1rem; font-weight: 400; color: #555; }
+    .slip-header h4 { margin: 10px 0 0; font-size: 0.95rem; color: #667eea; text-transform: uppercase; letter-spacing: 1px; }
+    .tracking-box { text-align: center; background: #f0f4ff; border: 2px dashed #667eea; border-radius: 8px; padding: 15px; margin: 15px 0; }
+    .tracking-box .label { font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 1px; }
+    .tracking-box .number { font-size: 1.8rem; font-weight: 700; color: #667eea; letter-spacing: 2px; }
+    .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dotted #ddd; font-size: 0.9rem; }
+    .info-row .label { color: #64748b; font-weight: 600; }
+    .info-row .value { color: #1e293b; }
+    .docs-section { margin: 15px 0; }
+    .docs-section h5 { font-size: 0.85rem; color: #64748b; text-transform: uppercase; margin: 0 0 8px; }
+    .doc-item { padding: 4px 0; font-size: 0.88rem; color: #334155; }
+    .doc-item::before { content: "• "; color: #667eea; }
+    .total-box { text-align: right; background: #f8fafc; border-top: 2px solid #333; padding: 12px 15px; margin-top: 15px; }
+    .total-box .total-label { font-size: 0.85rem; color: #64748b; }
+    .total-box .total-amount { font-size: 1.5rem; font-weight: 700; color: #2b3a67; }
+    .signature-area { display: flex; justify-content: space-between; margin-top: 40px; }
+    .signature-line { text-align: center; width: 45%; }
+    .signature-line .line { border-top: 1px solid #333; margin-bottom: 5px; }
+    .signature-line .sig-label { font-size: 0.78rem; color: #64748b; }
+    .slip-footer { text-align: center; margin-top: 20px; font-size: 0.75rem; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 10px; }
+    .print-btn { display: block; max-width: 500px; margin: 20px auto 0; padding: 12px; background: #667eea; color: #fff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+    .print-btn:hover { background: #5a6fd6; }
+  </style>
+</head>
+<body>
+
+<div class="slip-container" id="claimSlip">
+  <div class="slip-header">
+    <h2>CITY COLLEGE OF EL SALVADOR</h2>
+    <h3>El Salvador City, Misamis Oriental</h3>
+    <h4>Document Request Claim Slip</h4>
+  </div>
+
+  <div class="tracking-box">
+    <div class="label">Tracking Number</div>
+    <div class="number" id="slipTracking">---</div>
+  </div>
+
+  <div class="info-row">
+    <span class="label">Student Name:</span>
+    <span class="value" id="slipName">---</span>
+  </div>
+  <div class="info-row">
+    <span class="label">Course & Year:</span>
+    <span class="value" id="slipCourse">---</span>
+  </div>
+  <div class="info-row">
+    <span class="label">Date Requested:</span>
+    <span class="value" id="slipDateRequested">---</span>
+  </div>
+  <div class="info-row">
+    <span class="label">Date Ready:</span>
+    <span class="value" id="slipDateReady">---</span>
+  </div>
+
+  <div class="docs-section">
+    <h5>Documents</h5>
+    <div id="slipDocuments">---</div>
+  </div>
+
+  <div class="total-box">
+    <div class="total-label">Total Amount</div>
+    <div class="total-amount" id="slipTotal">₱0.00</div>
+  </div>
+
+  <div class="signature-area">
+    <div class="signature-line">
+      <div class="line"></div>
+      <div class="sig-label">Student Signature</div>
+    </div>
+    <div class="signature-line">
+      <div class="line"></div>
+      <div class="sig-label">Registrar Staff</div>
+    </div>
+  </div>
+
+  <div class="slip-footer">
+    Present this slip at the Registrar's window to claim your documents.
+  </div>
+</div>
+
+<button class="print-btn no-print" onclick="window.print()">
+  <i class="fas fa-print"></i> Print Claim Slip
+</button>
+
+<script>
+  // Read request data from URL params or sessionStorage
+  document.addEventListener('DOMContentLoaded', function () {
+    const data = JSON.parse(sessionStorage.getItem('claimSlipData') || '{}');
+    if (!data.tracking_number) {
+      document.getElementById('claimSlip').innerHTML = '<div style="text-align:center;padding:40px;color:#94a3b8;"><h3>No claim slip data found.</h3><p>Please access this page from a request detail view.</p></div>';
+      return;
+    }
+
+    document.getElementById('slipTracking').textContent = data.tracking_number || '---';
+    document.getElementById('slipName').textContent = data.student_name || '---';
+    document.getElementById('slipCourse').textContent = data.course_year || '---';
+    document.getElementById('slipDateRequested').textContent = data.date_requested || '---';
+    document.getElementById('slipDateReady').textContent = data.date_released || '---';
+    document.getElementById('slipTotal').textContent = '₱' + parseFloat(data.total_price || 0).toFixed(2);
+
+    // Documents list
+    var docs = data.documents || {};
+    var html = '';
+    if (docs.tor_purpose && docs.tor_purpose.length) {
+      docs.tor_purpose.forEach(function(d) { html += '<div class="doc-item">TOR: ' + d + '</div>'; });
+    }
+    if (docs.certification && docs.certification.length) {
+      docs.certification.forEach(function(d) { html += '<div class="doc-item">' + d + '</div>'; });
+    }
+    if (docs.diploma && docs.diploma.length) {
+      docs.diploma.forEach(function(d) { html += '<div class="doc-item">Diploma: ' + d + '</div>'; });
+    }
+    if (docs.cav_overseas) {
+      html += '<div class="doc-item">CAV Overseas (' + (docs.cav_copies || 1) + ' copy)</div>';
+    }
+    document.getElementById('slipDocuments').innerHTML = html || '<div class="doc-item">N/A</div>';
+  });
+</script>
+
+</body>
+</html>

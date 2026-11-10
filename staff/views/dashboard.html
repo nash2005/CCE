@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <title>Staff Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/css/theme.css">
+  <style>
+    .now-serving-number {
+      font-size: 4rem;
+      font-weight: 800;
+      color: var(--cces-green);
+      line-height: 1;
+      margin: 0.25rem 0;
+    }
+    .queue-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+    .queue-actions button { font-size: 0.82rem; padding: 0.45rem 1rem; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<div class="content" style="margin-left:0;margin-top:88px;">
+  <div class="topbar d-flex justify-content-between align-items-center">
+    <h5>Registrar Dashboard</h5>
+    <span>Welcome, Staff</span>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-3 col-6">
+      <div class="stat-card bg-primary-gradient">
+        <h6>Total Students</h6>
+        <h2 id="totalStudents">0</h2>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card bg-success-gradient">
+        <h6>Active Students</h6>
+        <h2 id="activeStudents">0</h2>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card bg-warning-gradient">
+        <h6>Archived Students</h6>
+        <h2 id="archivedStudents">0</h2>
+      </div>
+    </div>
+    <div class="col-md-3 col-6">
+      <div class="stat-card" style="border-left-color:var(--cces-green);">
+        <h6>Served Today</h6>
+        <h2 id="completedToday" style="color:var(--cces-green);">0</h2>
+      </div>
+    </div>
+  </div>
+
+  <!-- Queue Section -->
+  <div class="queue-container">
+    <div class="queue-header">
+      <h4><i class="fas fa-users me-2"></i> Queue Management</h4>
+      <div class="queue-stats">
+        <div class="queue-stat">
+          <div class="label">Now Serving</div>
+          <div class="value" id="currentServing">1</div>
+        </div>
+        <div class="queue-stat">
+          <div class="label">Served Today</div>
+          <div class="value" id="servedToday">0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Now Serving Card -->
+    <div class="now-serving">
+      <h3>NOW SERVING</h3>
+      <div class="now-serving-number" id="nowServingNumber">1</div>
+      <div class="queue-actions">
+        <button class="btn-next" onclick="nextQueue()"><i class="fas fa-forward me-1"></i> Next</button>
+        <button class="btn-pause" onclick="restartQueue()" style="color:var(--cces-red);border-color:var(--cces-red);"><i class="fas fa-redo me-1"></i> Restart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/REQUEST/shared/js/csrf.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/REQUEST/shared/js/auth.js"></script>
+<script src="/REQUEST/shared/js/escape.js"></script>
+<script src="../script/dashboard.js"></script>
+
+</body>
+</html>

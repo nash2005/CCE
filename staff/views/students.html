@@ -1,0 +1,172 @@
+<!doctype html>
+<html>
+<head>
+  <title>Students Management</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/css/theme.css">
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<div class="content" style="margin-left:0;margin-top:88px;">
+  <div class="topbar d-flex justify-content-between align-items-center">
+    <h5>Students Management</h5>
+    <span>Welcome, Staff</span>
+  </div>
+
+  <!-- Search and Filter Section -->
+  <div class="search-section">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="input-group">
+          <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+          <input type="text" class="form-control" id="searchInput" placeholder="Search by name, ID, course...">
+        </div>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" id="courseFilter">
+          <option value="">All Courses</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <select class="form-select" id="yearFilter">
+          <option value="">All Years</option>
+          <option value="1">1st Year</option>
+          <option value="2">2nd Year</option>
+          <option value="3">3rd Year</option>
+          <option value="4">4th Year</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100" onclick="applyFilters()">
+          <i class="fas fa-search"></i> Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Students Table -->
+  <div class="table-container">
+    <h5 class="mb-3"><i class="fas fa-user-graduate me-2"></i>Student List</h5>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Student Number</th>
+            <th>Full Name</th>
+            <th>Course</th>
+            <th>Year Level</th>
+            <th>Email</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="studentTableBody">
+          <!-- Data will be loaded here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/REQUEST/shared/js/csrf.js"></script>
+<script src="/REQUEST/shared/js/auth.js"></script>
+<script src="/REQUEST/shared/js/escape.js"></script>
+<script>
+// Load sidebar
+fetch('sidebar.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+    });
+
+// Load courses for filter
+async function loadCourses() {
+    try {
+        const response = await axios.get('../api/get_courses.php');
+        if (response.data.success) {
+            const courses = response.data.data;
+            const select = document.getElementById('courseFilter');
+            courses.forEach(course => {
+                select.innerHTML += `<option value="${escapeHtml(course.course_id)}">${escapeHtml(course.course_name)}</option>`;
+            });
+        }
+    } catch (error) {
+        console.error('Error loading courses:', error);
+    }
+}
+
+// Load students
+async function loadStudents() {
+    const search = document.getElementById('searchInput').value;
+    const course = document.getElementById('courseFilter').value;
+    const year = document.getElementById('yearFilter').value;
+    
+    try {
+        const response = await axios.get('../api/get_students.php', {
+            params: { search, course, year }
+        });
+        
+        if (response.data.success) {
+            displayStudents(response.data.data);
+        }
+    } catch (error) {
+        console.error('Error loading students:', error);
+        document.getElementById('studentTableBody').innerHTML = `
+            <tr><td colspan="6" class="text-center text-danger">Error loading students</td></tr>
+        `;
+    }
+}
+
+// Display students
+function displayStudents(students) {
+    const tbody = document.getElementById('studentTableBody');
+    
+    if (!students || students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center">No students found</td></tr>`;
+        return;
+    }
+    
+    tbody.innerHTML = '';
+    students.forEach(student => {
+        const statusClass = student.status === 'active' ? 'status-active' : 'status-inactive';
+        tbody.innerHTML += `
+            <tr>
+                <td><strong>${escapeHtml(student.student_number || 'N/A')}</strong></td>
+                <td>${escapeHtml(student.first_name || '')} ${escapeHtml(student.last_name || '')}</td>
+                <td>${escapeHtml(student.course_name || 'N/A')}</td>
+                <td>${escapeHtml(student.year_level || 'N/A')}</td>
+                <td>${escapeHtml(student.email || 'N/A')}</td>
+                <td><span class="status-badge ${statusClass}">${escapeHtml(student.status || 'N/A')}</span></td>
+            </tr>
+        `;
+    });
+}
+
+// Apply filters
+function applyFilters() {
+    loadStudents();
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    loadCourses();
+    loadStudents();
+});
+
+// Real-time search
+let timeout;
+document.getElementById('searchInput').addEventListener('input', function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(loadStudents, 500);
+});
+
+document.getElementById('courseFilter').addEventListener('change', loadStudents);
+document.getElementById('yearFilter').addEventListener('change', loadStudents);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+﻿/* Staff/Registrar Module - inherits from shared/css/theme.css */
+
+/* Staff-specific table overrides */
+.students-table .btn-sm {
+  font-size: 0.78rem;
+  padding: 0.25rem 0.5rem;
+}

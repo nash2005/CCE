@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+<head>
+  <title>Archived Students</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/css/theme.css">
+</head>
+<body>
+
+<div id="sidebar-container"></div>
+
+<div class="content" style="margin-left:0;margin-top:88px;">
+  <div class="topbar d-flex justify-content-between align-items-center">
+    <h5>Archived Students</h5>
+    <span>Welcome, Staff</span>
+  </div>
+
+  <!-- Search Section -->
+  <div class="search-section">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="input-group">
+          <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+          <input type="text" class="form-control" id="searchInput" placeholder="Search archived students...">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <select class="form-select" id="dateFilter">
+          <option value="">All Time</option>
+          <option value="today">Today</option>
+          <option value="week">This Week</option>
+          <option value="month">This Month</option>
+          <option value="year">This Year</option>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary w-100" onclick="applyFilters()">
+          <i class="fas fa-search"></i> Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Archived Students Table -->
+  <div class="table-container">
+    <h5 class="mb-3"><i class="fas fa-archive me-2"></i>Archived Students List</h5>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Student Number</th>
+            <th>Full Name</th>
+            <th>Course</th>
+            <th>Year Level</th>
+            <th>Archived Date</th>
+          </tr>
+        </thead>
+        <tbody id="archivedTableBody">
+          <!-- Data will be loaded here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/REQUEST/shared/js/csrf.js"></script>
+<script src="/REQUEST/shared/js/auth.js"></script>
+<script>
+// Load sidebar
+fetch('sidebar.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('sidebar-container').innerHTML = data;
+    });
+
+// Load archived students
+async function loadArchived() {
+    const search = document.getElementById('searchInput').value;
+    const dateFilter = document.getElementById('dateFilter').value;
+    
+    try {
+        const response = await axios.get('../api/get_archived.php', {
+            params: { search, date_filter: dateFilter }
+        });
+        
+        if (response.data.success) {
+            displayArchived(response.data.data);
+        }
+    } catch (error) {
+        console.error('Error loading archived students:', error);
+        document.getElementById('archivedTableBody').innerHTML = `
+            <tr><td colspan="5" class="text-center text-danger">Error loading archived students</td></tr>
+        `;
+    }
+}
+
+// Display archived students
+function displayArchived(students) {
+    const tbody = document.getElementById('archivedTableBody');
+    
+    if (!students || students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center">No archived students found</td></tr>`;
+        return;
+    }
+    
+    tbody.innerHTML = '';
+    students.forEach(student => {
+        const date = student.archived_at ? new Date(student.archived_at).toLocaleDateString() : 'N/A';
+        tbody.innerHTML += `
+            <tr>
+                <td>${student.student_number || 'N/A'}</td>
+                <td>${student.first_name || ''} ${student.last_name || ''}</td>
+                <td>${student.course || 'N/A'}</td>
+                <td>${student.year_level || 'N/A'}</td>
+                <td>${date}</td>
+            </tr>
+        `;
+    });
+}
+
+// Apply filters
+function applyFilters() {
+    loadArchived();
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    loadArchived();
+});
+
+// Real-time search
+let timeout;
+document.getElementById('searchInput').addEventListener('input', function() {
+    clearTimeout(timeout);
+    timeout = setTimeout(loadArchived, 500);
+});
+
+document.getElementById('dateFilter').addEventListener('change', loadArchived);
+</script>
+
+</body>
+</html>

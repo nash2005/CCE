@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>School Online Requisition - Login</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../../login/style/login.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="login-left">
+        <!-- floating shapes -->
+        <div class="shape shape1"></div>
+        <div class="shape shape2"></div>
+        <div class="shape shape3"></div>
+        <div class="shape shape4"></div>
+
+        <img src="../../images/1.png" class="logo" />
+
+        <div class="animated-block">
+          <h3>CITY COLLEGE OF EL SALVADOR</h3>
+          <p>School Online Requisition</p>
+        </div>
+      </div>
+
+      <div class="login-right">
+        <div class="login-header">
+          <h2>Sign in to your account</h2>
+          <p class="text-muted">Enter your credentials to access the system</p>
+        </div>
+
+        <div id="errorMessage" class="alert alert-danger" style="display: none">
+          <i class="fas fa-exclamation-circle"></i> <span id="errorText"></span>
+        </div>
+
+        <form id="loginForm">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username/ID Number</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              placeholder="Enter your Username/ID Number"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+                style="margin-bottom: 0; border-right: none"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary toggle-password"
+                id="togglePassword"
+                tabindex="-1"
+                style="
+                  border: 2px solid #b0bdd0;
+                  border-left: none;
+                  border-radius: 0 8px 8px 0;
+                  background: #eef2f7;
+                "
+              >
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3 captcha-row">
+            <span id="captchaQuestion" class="captcha-question"></span>
+
+            <input
+              type="text"
+              class="form-control captcha-mini"
+              id="captchaInput"
+              placeholder="?"
+              inputmode="numeric"
+              pattern="\d*"
+            />
+
+            <input type="hidden" id="captchaAnswer" />
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-login w-100"
+            id="signInBtn"
+            disabled
+          >
+            <i class="fas fa-sign-in-alt"></i> Sign In
+          </button>
+
+          <div class="mt-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="terms-check">
+                <input type="checkbox" id="agreeTerms" />
+                <label for="agreeTerms">
+                  I agree to the
+                  <a href="#" id="openTerms" class="terms-link"
+                    >Terms and Conditions</a
+                  >
+                </label>
+              </div>
+              <a href="forgot_password.html" class="forgot-password-link"
+                >Forgot Password?</a
+              >
+            </div>
+            <div class="text-start mt-2">
+              <span class="text-muted" style="font-size: 0.88rem"
+                >Don't have an account?</span
+              >
+              <a
+                href="request_registration.html"
+                class="forgot-password-link"
+                style="font-weight: 600"
+                >Request Registration</a
+              >
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Terms and Conditions Modal -->
+    <div
+      class="modal fade"
+      id="termsModal"
+      tabindex="-1"
+      aria-labelledby="termsModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header terms-modal-header">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fas fa-file-contract"></i>
+              <h5 class="modal-title" id="termsModalLabel">
+                Terms and Conditions
+              </h5>
+            </div>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body terms-modal-body">
+            <p class="terms-intro">
+              Welcome to the
+              <strong>School Online Requisition System</strong> of the
+              <strong>City College of El Salvador</strong>. By accessing and
+              using this system, you agree to the following terms and
+              conditions. Please read them carefully before proceeding.
+            </p>
+
+            <h6>1. System Purpose</h6>
+            <p>
+              This system is designed exclusively for the online requesting and
+              processing of academic documents, including but not limited to
+              Transcript of Records (TOR), Certifications, Diplomas, Clearances,
+              and Certificate of Authenticity and Verification (CAV). It is
+              intended solely for enrolled students, alumni, and authorized
+              personnel of the City College of El Salvador.
+            </p>
+
+            <h6>2. User Accounts and Access</h6>
+            <p>
+              Each user is provided a unique account by the institution. You are
+              responsible for maintaining the confidentiality of your login
+              credentials. Sharing your account with others is strictly
+              prohibited. Any activity performed under your account is your
+              responsibility. Report any unauthorized access to the Registrar's
+              Office immediately.
+            </p>
+
+            <h6>3. Accuracy of Information</h6>
+            <p>
+              You agree to provide accurate and truthful information when
+              submitting document requests. Any falsification of records or
+              misrepresentation of personal data may result in the denial of
+              your request and may be subject to disciplinary action in
+              accordance with the City College of El Salvador's Student Handbook
+              and applicable laws.
+            </p>
+
+            <h6>4. Document Request Processing</h6>
+            <p>
+              All document requests are subject to verification and approval by
+              the designated offices, including the Dean's Office, Library,
+              Finance Office, and Guidance Office. Processing times may vary
+              depending on the type of document requested and current workload.
+              The institution reserves the right to reject requests that are
+              incomplete, inaccurate, or non-compliant with institutional
+              policies.
+            </p>
+
+            <h6>5. Fees and Payments</h6>
+            <p>
+              Certain documents may require payment of corresponding fees as set
+              by the City College of El Salvador. Fees must be settled at the
+              Finance Office or through approved payment channels before
+              documents are released. Fee schedules are subject to change
+              without prior notice.
+            </p>
+
+            <h6>6. Clearance Requirements</h6>
+            <p>
+              Some document requests require clearance from multiple departments
+              (Dean's Office, Library, Finance, and Guidance). Your request will
+              only proceed to the next stage once all required clearances have
+              been obtained. It is your responsibility to settle any outstanding
+              obligations with each department.
+            </p>
+
+            <h6>7. Data Privacy</h6>
+            <p>
+              The City College of El Salvador is committed to protecting your
+              personal information in compliance with the
+              <strong>Data Privacy Act of 2012 (Republic Act No. 10173)</strong
+              >. Your personal data collected through this system will be used
+              solely for academic and administrative purposes. We will not share
+              your information with third parties without your consent, except
+              as required by law.
+            </p>
+
+            <h6>8. Acceptable Use</h6>
+            <p>You agree not to:</p>
+            <ul>
+              <li>Use the system for any unlawful or unauthorized purpose</li>
+              <li>
+                Attempt to gain unauthorized access to other accounts or system
+                components
+              </li>
+              <li>
+                Upload malicious files or attempt to disrupt system operations
+              </li>
+              <li>Use automated tools or bots to interact with the system</li>
+              <li>
+                Tamper with, modify, or interfere with any part of the system
+              </li>
+            </ul>
+
+            <h6>9. System Availability</h6>
+            <p>
+              The institution strives to maintain system availability but does
+              not guarantee uninterrupted access. The system may be temporarily
+              unavailable due to maintenance, upgrades, or unforeseen technical
+              issues. The City College of El Salvador shall not be held liable
+              for any inconvenience caused by system downtime.
+            </p>
+
+            <h6>10. Limitation of Liability</h6>
+            <p>
+              The City College of El Salvador shall not be liable for any
+              direct, indirect, incidental, or consequential damages arising
+              from the use or inability to use this system. Users are advised to
+              keep copies of their request confirmations for their records.
+            </p>
+
+            <h6>11. Amendments</h6>
+            <p>
+              The City College of El Salvador reserves the right to modify these
+              terms and conditions at any time. Continued use of the system
+              after changes have been made constitutes acceptance of the revised
+              terms. Users will be notified of significant changes through the
+              system or official school communication channels.
+            </p>
+
+            <h6>12. Governing Law</h6>
+            <p>
+              These terms and conditions are governed by the laws of the
+              Republic of the Philippines. Any disputes arising from the use of
+              this system shall be resolved under the jurisdiction of the
+              appropriate courts in El Salvador, Misamis Oriental.
+            </p>
+
+            <p class="terms-footer-text">
+              By checking the
+              <strong>"I agree to the Terms and Conditions"</strong> box and
+              signing in, you acknowledge that you have read, understood, and
+              agree to be bound by these terms and conditions.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-login" id="acceptTermsBtn">
+              I Accept
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/REQUEST/shared/js/csrf.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="../../login/script/login.js"></script>
+  </body>
+</html>
