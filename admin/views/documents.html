@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documents - Admin Dashboard</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../shared/css/theme.css" />
+    <style>
+      .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 20px;
+      }
+      .loading-spinner.active {
+        display: block;
+      }
+      .empty-state {
+        text-align: center;
+        padding: 40px 0;
+        color: #6c757d;
+      }
+      .type-tor { background: rgba(25, 118, 210, 0.1); color: #1976d2; }
+      .type-certification { background: rgba(123, 31, 162, 0.1); color: #7b1fa2; }
+      .type-cav { background: rgba(56, 142, 60, 0.1); color: #388e3c; }
+      .type-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="sidebar-container"></div>
+
+    <div class="content" style="margin-left:0;margin-top:88px;">
+      <h4>Documents</h4>
+      <span id="docCount" class="text-muted">Loading...</span>
+
+      <div class="d-flex justify-content-between align-items-center my-3 flex-wrap gap-2">
+        <div>
+          <button class="btn btn-outline-primary filter-btn active" data-type="all">All</button>
+          <button class="btn btn-outline-primary filter-btn" data-type="tor">TOR</button>
+          <button class="btn btn-outline-primary filter-btn" data-type="certification">Certification</button>
+          <button class="btn btn-outline-primary filter-btn" data-type="cav">CAV</button>
+        </div>
+        <button class="btn btn-success" id="addDocBtn">
+          <i class="fas fa-plus"></i> Add Document
+        </button>
+      </div>
+
+      <div class="loading-spinner" id="loadingSpinner">
+        <div class="spinner-border text-primary"></div>
+        <p>Loading documents...</p>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover" id="documentsTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Document Name</th>
+              <th>Type</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="documentsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Add Document Modal -->
+    <div class="modal fade" id="addDocModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add New Document</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="addDocForm">
+              <div class="mb-3">
+                <label for="docName" class="form-label">Document Name</label>
+                <input type="text" class="form-control" id="docName" required />
+              </div>
+              <div class="mb-3">
+                <label for="docType" class="form-label">Type</label>
+                <select class="form-select" id="docType" required>
+                  <option value="">Select Type</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="docPrice" class="form-label">Price (PHP)</label>
+                <input type="number" class="form-control" id="docPrice" min="0" step="0.01" required />
+              </div>
+              <button type="submit" class="btn btn-primary w-100">Add Document</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Price Modal -->
+    <div class="modal fade" id="editPriceModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fas fa-edit me-2"></i>Edit Price</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="editPriceForm">
+              <input type="hidden" id="editDocId" />
+              <div class="mb-2">
+                <label class="form-label fw-bold" id="editDocName">Document</label>
+              </div>
+              <div class="mb-3">
+                <label for="editDocPrice" class="form-label">Price (PHP)</label>
+                <input type="number" class="form-control" id="editDocPrice" min="0" step="0.01" required />
+              </div>
+              <button type="submit" class="btn btn-primary w-100">
+                <i class="fas fa-save me-1"></i>Save Price
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/REQUEST/shared/js/csrf.js"></script>
+    <script src="/REQUEST/shared/js/auth.js"></script>
+    <script src="../script/documents.js"></script>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archived Requests - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../shared/css/theme.css" />
+    <style>
+      .req-table th {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        border-bottom: 2px solid #e2e8f0;
+      }
+      .req-table td {
+        vertical-align: middle;
+        font-size: 0.9rem;
+      }
+      .badge-pending { background: #f59e0b; color: #fff; }
+      .badge-approved { background: #10b981; color: #fff; }
+      .badge-rejected { background: #ef4444; color: #fff; }
+      .badge-processing { background: #3b82f6; color: #fff; }
+      .doc-pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        background: #e0f2fe;
+        color: #0369a1;
+        margin: 1px 2px;
+      }
+      .clearance-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 4px;
+      }
+      .clearance-dot.approved { background: #10b981; }
+      .clearance-dot.pending { background: #f59e0b; }
+      .clearance-dot.rejected { background: #ef4444; }
+      .price-text { color: #1e40af; font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <div id="sidebar-container"></div>
+
+    <div class="content" style="margin-left:0;margin-top:88px;">
+      <div class="topbar">
+        <h4 class="mb-0"><i class="fas fa-archive me-2"></i>Archived Requests</h4>
+      </div>
+
+      <!-- Filters -->
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+        <span id="archivedCount" class="text-muted">Loading...</span>
+        <div class="ms-auto">
+          <input type="text" class="form-control form-control-sm" id="searchInput" placeholder="Search student..." style="width:220px;">
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive bg-white rounded shadow-sm">
+        <table class="table req-table mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Student</th>
+              <th>Course/Year</th>
+              <th>Documents</th>
+              <th>Price</th>
+              <th>Clearance</th>
+              <th>Status</th>
+              <th>Date Requested</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr>
+              <td colspan="8" class="text-center py-4">
+                <div class="spinner-border text-primary"></div>
+                <p class="mt-2 text-muted mb-0">Loading archived requests...</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <nav class="mt-3">
+        <ul class="pagination justify-content-center" id="pagination"></ul>
+      </nav>
+    </div>
+
+    <!-- Detail Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>Request Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="detailBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/REQUEST/shared/js/csrf.js"></script>
+    <script src="/REQUEST/shared/js/auth.js"></script>
+    <script src="../script/archived_requests.js"></script>
+  </body>
+</html>

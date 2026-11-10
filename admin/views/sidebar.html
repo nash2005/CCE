@@ -1,0 +1,48 @@
+<div class="topbar">
+  <div class="topbar-brand">
+    <img src="../../images/1.png" alt="CCES" style="width:32px;height:32px;max-width:32px;max-height:32px;object-fit:contain;">
+    <span>CCES Online Requisition</span>
+  </div>
+  <div style="flex:1;"></div>
+  <div class="topbar-right">
+    <span class="role-label">Role</span>
+    <span class="role-value">Administrator</span>
+    <a href="#" id="logoutBtnTopbar" class="topbar-logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <button class="navbar-toggler" id="navbarToggler" aria-label="Toggle navigation"><i class="fas fa-bars"></i></button>
+  </div>
+</div>
+
+<nav class="admin-navbar">
+  <div class="admin-navbar-inner">
+    <div class="navbar-dropdown">
+      <a href="dashboard.html" class="navbar-link"><i class="fas fa-chart-pie"></i> Dashboard</a>
+    </div>
+    <div class="navbar-dropdown">
+      <a href="#" class="navbar-link" onclick="event.preventDefault()"><i class="fas fa-users-cog"></i> Manage Users <i class="fas fa-caret-down"></i></a>
+      <div class="navbar-dropdown-menu">
+        <a href="manage_users.html"><i class="fas fa-user-cog"></i> Account Management</a>
+        <a href="registration_requests.html"><i class="fas fa-user-clock"></i> Registration Requests</a>
+        <a href="archived_students.html"><i class="fas fa-archive"></i> Archived Students</a>
+      </div>
+    </div>
+    <div class="navbar-dropdown">
+      <a href="#" class="navbar-link" onclick="event.preventDefault()"><i class="fas fa-file-alt"></i> Manage Requests <i class="fas fa-caret-down"></i></a>
+      <div class="navbar-dropdown-menu">
+        <a href="manage_requests.html"><i class="fas fa-file-alt"></i> Requests</a>
+        <a href="archived_requests.html"><i class="fas fa-archive"></i> Archived Requests</a>
+      </div>
+    </div>
+    <div class="navbar-dropdown">
+      <a href="documents.html" class="navbar-link"><i class="fas fa-folder-open"></i> Documents</a>
+    </div>
+    <div class="navbar-dropdown">
+      <a href="#" class="navbar-link" onclick="event.preventDefault()"><i class="fas fa-cog"></i> System <i class="fas fa-caret-down"></i></a>
+      <div class="navbar-dropdown-menu">
+        <a href="holidays.html"><i class="fas fa-calendar-alt"></i> Holidays</a>
+      </div>
+    </div>
+    <div class="navbar-dropdown">
+      <a href="reports.html" class="navbar-link"><i class="fas fa-chart-line"></i> Reports</a>
+    </div>
+  </div>
+</nav>
