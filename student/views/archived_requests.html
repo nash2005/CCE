@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Archived Requests - City College of El Salvador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../shared/css/theme.css" />
+    <link rel="stylesheet" href="../style/style.css" />
+    <style>
+      body { background: #f0f2f5; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; }
+      .request-container { display: flex; min-height: 100vh; }
+      .main-content { flex: 1; margin-left: 0; margin-top: calc(var(--cces-topbar-height, 48px) + 40px); padding: 1.5rem 2rem; }
+      .content-wrapper { max-width: 1400px; margin: 0 auto; }
+      .page-header {
+        background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        color: white; padding: 1.5rem 2rem; border-radius: 15px; margin-bottom: 2rem;
+      }
+      .page-header h2 { margin: 0; font-weight: 600; font-size: 1.8rem; }
+      .page-header p { margin: 0.5rem 0 0 0; opacity: 0.9; }
+      .table-container { background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+      .requests-table { width: 100%; }
+      .requests-table thead th { background: #f8fafc; color: #2c3e50; font-weight: 600; font-size: 0.9rem; padding: 1rem; border-bottom: 2px solid #6b7280; }
+      .requests-table tbody td { padding: 1rem; vertical-align: middle; color: #4a5568; border-bottom: 1px solid #e2e8f0; }
+      .badge-status { padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; display: inline-block; }
+      .badge-pending { background: #fff3cd; color: #856404; }
+      .badge-approved { background: #d4edda; color: #155724; }
+      .badge-processing { background: #cce5ff; color: #004085; }
+      .badge-ready { background: #d1ecf1; color: #0c5460; }
+      .badge-released { background: #d4edda; color: #155724; }
+      .badge-rejected { background: #f8d7da; color: #721c24; }
+      .badge-claimed { background: #e8e0f5; color: #5b21b6; }
+      .document-tag { display: inline-block; background: #e6f7ff; color: #1890ff; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin: 0.2rem; border: 1px solid #91d5ff; }
+      .btn-action { width: 32px; height: 32px; border-radius: 8px; border: none; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s ease; }
+      .btn-restore { background: #ecfdf5; color: #10b981; }
+      .btn-restore:hover { background: #10b981; color: white; }
+      .empty-state { text-align: center; padding: 3rem; color: #94a3b8; }
+      .empty-state i { font-size: 2.5rem; margin-bottom: 0.75rem; display: block; }
+      @media (max-width: 768px) {
+        .main-content { margin-left: 0; margin-top: calc(var(--cces-topbar-height, 48px) + 40px); padding: 0.75rem; }
+        .page-header { padding: 1rem; border-radius: 10px; margin-bottom: 0.75rem; }
+        .page-header h2 { font-size: 1.1rem; }
+
+        /* Card layout */
+        .table-container { padding: 0; background: transparent; box-shadow: none; overflow: visible; }
+        .requests-table thead { display: none; }
+        .requests-table tbody { display: block; }
+        .requests-table tbody tr {
+          display: block; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+          padding: 0.85rem 1rem; margin-bottom: 0.65rem; box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .requests-table tbody td {
+          display: block; padding: 0.2rem 0; border: none; font-size: 0.84rem;
+        }
+        .requests-table tbody td::before {
+          display: block; font-weight: 600; color: #718096; font-size: 0.68rem;
+          text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 0.1rem;
+        }
+        .requests-table tbody td:nth-child(1)::before { content: "Request ID"; }
+        .requests-table tbody td:nth-child(2)::before { content: "Date Requested"; }
+        .requests-table tbody td:nth-child(3)::before { content: "Documents"; }
+        .requests-table tbody td:nth-child(4)::before { content: "Total Price"; }
+        .requests-table tbody td:nth-child(5)::before { content: "Status"; }
+        .requests-table tbody td:nth-child(6) { display: flex; gap: 0.5rem; padding-top: 0.4rem; margin-top: 0.3rem; border-top: 1px solid #f0f0f0; }
+        .requests-table tbody td:nth-child(6)::before { display: none; }
+        .document-tag { font-size: 0.7rem; padding: 0.15rem 0.35rem; }
+        .badge-status { font-size: 0.72rem; padding: 0.25rem 0.6rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="request-container">
+      <div id="sidebar-container"></div>
+      <div class="main-content">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <div>
+              <h2><i class="fas fa-archive me-2"></i>Archived Requests</h2>
+              <p>View your archived document requests</p>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="requests-table">
+              <thead>
+                <tr>
+                  <th>Request ID</th>
+                  <th>Date Requested</th>
+                  <th>Documents</th>
+                  <th>Total Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="requestsTableBody">
+                <tr><td colspan="6" class="text-center">Loading...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/REQUEST/shared/js/csrf.js"></script>
+    <script src="/REQUEST/shared/js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/REQUEST/shared/js/escape.js"></script>
+    <script src="../script/archived_requests.js"></script>
+  </body>
+</html>

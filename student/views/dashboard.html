@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../shared/css/theme.css">
+    <link rel="stylesheet" href="../style/style.css">
+    <style>
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .student-details-card {
+            background: var(--cces-card);
+            border-radius: var(--cces-radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--cces-shadow);
+            border-left: 3px solid var(--cces-primary);
+            transition: box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .student-details-card:hover {
+            box-shadow: var(--cces-shadow-md);
+        }
+        .student-icon {
+            font-size: 3rem;
+            color: var(--cces-primary);
+            margin-bottom: 0.75rem;
+        }
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--cces-primary);
+            margin-bottom: 0.25rem;
+        }
+        .card-subtitle {
+            color: var(--cces-text-muted);
+            font-size: 0.8rem;
+        }
+        .welcome-message {
+            margin-bottom: 1.25rem;
+        }
+        .welcome-message h2 {
+            color: var(--cces-text);
+            font-weight: 400;
+            font-size: 1.1rem;
+        }
+        
+        /* Request Tracker */
+        .tracker-container {
+            background: var(--cces-card);
+            border-radius: var(--cces-radius);
+            box-shadow: var(--cces-shadow);
+            margin-top: 1.25rem;
+            overflow: hidden;
+        }
+
+        .tracker-header {
+            background: var(--cces-bg);
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--cces-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .tracker-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .tracker-title i {
+            color: var(--cces-primary);
+            font-size: 1.1rem;
+        }
+
+        .tracker-title h5 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--cces-text);
+            font-size: 1rem;
+        }
+
+        .tracker-badge {
+            background: var(--cces-primary-light);
+            color: var(--cces-primary-dark);
+            padding: 0.35rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .tracker-badge i {
+            font-size: 0.8rem;
+        }
+        
+        .tracker-table-wrapper {
+            padding: 0;
+            overflow-x: auto;
+        }
+        
+        .tracker-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        
+        .tracker-table thead th {
+            background: var(--cces-bg);
+            color: #4a6f8a;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--cces-border);
+            white-space: nowrap;
+        }
+        
+        .tracker-table tbody td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #edf2f7;
+            color: var(--cces-text);
+            vertical-align: middle;
+        }
+        
+        .tracker-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .request-id {
+            font-weight: 600;
+            color: var(--cces-primary);
+            font-family: monospace;
+        }
+        
+        .document-type {
+            font-weight: 500;
+        }
+        
+        .document-type small {
+            display: block;
+            color: #7f8c8d;
+            font-size: 0.75rem;
+            margin-top: 0.2rem;
+        }
+        
+        .date-requested {
+            white-space: nowrap;
+        }
+        
+        .date-requested i {
+            color: #95a5a6;
+            margin-right: 0.4rem;
+            font-size: 0.8rem;
+        }
+        
+        /* CHED eCAV Style Status Badges */
+        .status-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .status-badge {
+            padding: 0.35rem 1rem;
+            border-radius: 50px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+        
+        .status-badge i {
+            font-size: 0.75rem;
+        }
+        
+        .status-pending {
+            background: #fff9e6;
+            color: #b85c00;
+            border: 1px solid #ffe0b3;
+        }
+        
+        .status-processing {
+            background: #e6f3ff;
+            color: #005c99;
+            border: 1px solid #b8e0ff;
+        }
+        
+        .status-approved {
+            background: #e3fcef;
+            color: #006644;
+            border: 1px solid #abf0d5;
+        }
+        
+        .status-completed {
+            background: #e8f5e9;
+            color: #1e4a2b;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .status-rejected {
+            background: #ffe6e6;
+            color: #b30000;
+            border: 1px solid #ffcccc;
+        }
+        
+        .status-released {
+            background: #e8eaf6;
+            color: #1a237e;
+            border: 1px solid #c5cae9;
+        }
+        
+        .tracker-footer {
+            background: var(--cces-bg);
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--cces-border);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+        
+        .tracker-footer i {
+            color: var(--cces-primary);
+        }
+        
+        .no-requests {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: #6c757d;
+        }
+        
+        .no-requests i {
+            font-size: 2.5rem;
+            color: #d1d9e6;
+            margin-bottom: 1rem;
+        }
+        
+        .no-requests p {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .no-requests small {
+            color: #95a5a6;
+        }
+        
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem 1.5rem;
+        }
+        
+        .loading-spinner .spinner-border {
+            width: 2.5rem;
+            height: 2.5rem;
+            color: var(--cces-primary);
+        }
+        
+        .tracker-table tbody tr.clickable-row {
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+        .tracker-table tbody tr.clickable-row:hover {
+            background-color: #eef2ff;
+        }
+
+        /* ===== Queue Modal ===== */
+        .queue-modal .modal-header {
+            background: var(--cces-card);
+            color: var(--cces-text);
+            border-bottom: 1px solid var(--cces-border);
+        }
+        .queue-modal .modal-header .btn-close {
+            filter: none;
+        }
+
+        .req-info-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding: 1rem 1.25rem;
+            background: var(--cces-bg);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+        .req-info-bar .info-item {
+            font-size: 0.82rem;
+        }
+        .req-info-bar .info-label {
+            color: #94a3b8;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .req-info-bar .info-val {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        /* Horizontal numbered circle queue — always fits in one row */
+        .queue-track {
+            display: flex;
+            align-items: flex-start;
+            padding: 1.25rem 0;
+        }
+
+        /* Individual line segments between circles */
+        .queue-segment {
+            flex: 1 1 0;
+            height: 4px;
+            border-radius: 2px;
+            z-index: 0;
+            align-self: flex-start;
+            margin: 18px -2px 0;
+        }
+        .seg-done {
+            background: #10b981;
+        }
+        .seg-fail {
+            background: #ef4444;
+        }
+        .seg-current {
+            background: repeating-linear-gradient(
+                90deg,
+                #3b82f6 0px,
+                #3b82f6 6px,
+                transparent 6px,
+                transparent 10px
+            );
+            background-size: 200% 100%;
+            animation: marchingDash 0.8s linear infinite;
+        }
+        .seg-pending {
+            background: repeating-linear-gradient(
+                90deg,
+                #cbd5e1 0px,
+                #cbd5e1 6px,
+                transparent 6px,
+                transparent 10px
+            );
+        }
+        @keyframes marchingDash {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+
+        .queue-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            flex: 0 0 auto;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        .queue-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: 3px solid #e2e8f0;
+            background: #fff;
+            color: #94a3b8;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .queue-circle.done {
+            background: #10b981;
+            border-color: #10b981;
+            color: #fff;
+        }
+        .queue-circle.current {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            color: #fff;
+            box-shadow: 0 0 0 5px rgba(59,130,246,0.2);
+            animation: qpulse 2s infinite;
+        }
+        .queue-circle.fail {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: #fff;
+        }
+        @keyframes qpulse {
+            0%,100% { box-shadow: 0 0 0 5px rgba(59,130,246,0.2); }
+            50% { box-shadow: 0 0 0 9px rgba(59,130,246,0.08); }
+        }
+
+        .queue-node.active-node .queue-circle {
+            transform: scale(1.18);
+            box-shadow: 0 0 0 5px rgba(79,70,229,0.2);
+        }
+        .queue-node.active-node .queue-circle.done {
+            box-shadow: 0 0 0 6px rgba(16,185,129,0.18);
+        }
+        .queue-node.active-node .queue-circle.fail {
+            box-shadow: 0 0 0 6px rgba(239,68,68,0.18);
+        }
+
+        .queue-day-label {
+            display: block;
+            margin-top: 0.4rem;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #94a3b8;
+            text-transform: uppercase;
+            text-align: center;
+            max-width: 92px;
+            line-height: 1.2;
+        }
+        .queue-node.active-node .queue-day-label {
+            color: #3b82f6;
+        }
+
+        /* Detail card below the queue track */
+        .queue-detail-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-top: 1.5rem;
+            min-height: 90px;
+            transition: all 0.3s ease;
+        }
+        .queue-detail-card.detail-done {
+            border-left: 4px solid #10b981;
+        }
+        .queue-detail-card.detail-current {
+            border-left: 4px solid #3b82f6;
+            background: #eff6ff;
+        }
+        .queue-detail-card.detail-fail {
+            border-left: 4px solid #ef4444;
+            background: #fef2f2;
+        }
+        .queue-detail-card.detail-pending {
+            border-left: 4px solid #e2e8f0;
+        }
+        .queue-detail-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+        .queue-detail-msg {
+            font-size: 0.88rem;
+            color: #475569;
+            margin: 0.25rem 0 0;
+            line-height: 1.8;
+        }
+        .queue-detail-status {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.2rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .qstatus-done { background: #d1fae5; color: #065f46; }
+        .qstatus-current { background: #dbeafe; color: #1e40af; }
+        .qstatus-fail { background: #fee2e2; color: #991b1b; }
+        .qstatus-pending { background: #f1f5f9; color: #64748b; }
+
+        /* Remarks */
+        .remarks-box {
+            background: #fef2f2;
+            border-left: 3px solid #ef4444;
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 1.25rem;
+        }
+        .remarks-box h6 {
+            font-size: 0.8rem;
+            color: #991b1b;
+            margin-bottom: 0.35rem;
+        }
+        .remarks-box p {
+            font-size: 0.82rem;
+            color: #7f1d1d;
+            margin: 0.15rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .content, #mainContent {
+                margin-top: calc(var(--cces-topbar-height, 48px) + 40px) !important;
+                padding: 0.75rem !important;
+            }
+            .dashboard-cards { grid-template-columns: 1fr; }
+            .student-details-card { padding: 1rem; }
+            .student-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+            .tracker-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 0.75rem 1rem; }
+            .tracker-container { border-radius: 12px; }
+
+            /* Card layout for tracker table */
+            .tracker-table-wrapper { overflow: visible; }
+            .tracker-table { display: block; }
+            .tracker-table thead { display: none; }
+            .tracker-table tbody { display: block; }
+            .tracker-table tbody tr {
+                display: block;
+                padding: 0.75rem 1rem;
+                border-bottom: 1px solid #edf2f7;
+                cursor: pointer;
+            }
+            .tracker-table tbody tr:last-child { border-bottom: none; }
+            .tracker-table tbody td {
+                display: block;
+                padding: 0.15rem 0;
+                border: none;
+                font-size: 0.84rem;
+            }
+            .tracker-table tbody td::before {
+                display: block;
+                font-weight: 600;
+                color: #718096;
+                font-size: 0.65rem;
+                text-transform: uppercase;
+                letter-spacing: 0.4px;
+            }
+            .tracker-table tbody td:nth-child(1)::before { content: "Request No."; }
+            .tracker-table tbody td:nth-child(2)::before { content: "Document"; }
+            .tracker-table tbody td:nth-child(3)::before { content: "Date Requested"; }
+            .tracker-table tbody td:nth-child(4)::before { content: "Claiming Schedule"; }
+            .tracker-table tbody td:nth-child(5)::before { display: none; }
+            .status-badge { padding: 0.2rem 0.55rem; font-size: 0.68rem; }
+
+            /* Queue modal — full screen */
+            .queue-modal .modal-header { background: var(--cces-card); }
+            .queue-modal .modal-title { font-size: 0.92rem; }
+            .queue-track { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 0.75rem 0.25rem; }
+            .queue-circle { width: 28px; height: 28px; font-size: 0.65rem; border-width: 2px; }
+            .queue-day-label { font-size: 0.46rem; max-width: 42px; }
+            .queue-segment { min-width: 14px; height: 3px; }
+            .req-info-bar { flex-direction: column; gap: 0.35rem; padding: 0.6rem; border-radius: 8px; margin-bottom: 1rem; }
+            .req-info-bar .info-item { font-size: 0.78rem; }
+            .req-info-bar .info-label { font-size: 0.62rem; }
+            .queue-detail-card { padding: 0.75rem; border-radius: 8px; margin-top: 1rem; }
+            .queue-detail-title { font-size: 0.9rem; }
+            .queue-detail-msg { font-size: 0.82rem; line-height: 1.5; }
+            .queue-detail-status { font-size: 0.7rem; }
+            .remarks-box { padding: 0.5rem 0.65rem; }
+            .remarks-box h6 { font-size: 0.75rem; }
+            .remarks-box p { font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Topbar only (no sidebar on dashboard) -->
+    <div id="sidebar-container"></div>
+
+    <!-- Main Content (no sidebar margin on dashboard) -->
+    <div class="content" id="mainContent" style="margin-left: 0; margin-top: calc(var(--cces-topbar-height, 48px) + 40px);">
+        <!-- Welcome / Page Header -->
+        <div class="page-header">
+            <h5>Welcome back, <span id="studentName">Student</span>!</h5>
+            <span>Here's an overview of your account and requests</span>
+        </div>
+
+            <!-- Student Details Card -->
+            <div class="dashboard-cards">
+                <!-- Student Details Card -->
+                <div class="student-details-card" onclick="window.location.href='student_profile.html'">
+                    <div class="student-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h5 class="card-title">STUDENT DETAILS</h5>
+                    <p class="card-subtitle">View and manage your profile information</p>
+                    <i class="fas fa-arrow-right mt-2" style="color: #667eea;"></i>
+                </div>
+            </div>
+
+            <!-- CHED eCAV Style Request Tracker -->
+            <div class="tracker-container">
+                <div class="tracker-header">
+                    <div class="tracker-title">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h5>Request Tracker</h5>
+                    </div>
+                    <div class="tracker-badge">
+                        <i class="fas fa-sync-alt"></i>
+                        <span id="lastUpdated">Real-time updates</span>
+                    </div>
+                </div>
+                
+                <!-- Loading State -->
+                <div id="loadingRequests" class="loading-spinner" style="display: none;">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2 text-muted">Fetching your requests...</p>
+                </div>
+                
+                <!-- Requests Table -->
+                <div class="tracker-table-wrapper" id="requestsTableContainer">
+                    <table class="tracker-table">
+                        <thead>
+                            <tr>
+                                <th>Request No.</th>
+                                <th>Document Type</th>
+                                <th>Date Requested</th>
+                                <th>Claiming Schedule</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requestsTableBody">
+                            <tr>
+                                <td colspan="5" class="no-requests">
+                                    <i class="fas fa-file-alt"></i>
+                                    <p>No requests found</p>
+                                    <small>Your request history will appear here</small>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="tracker-footer" style="flex-direction: column; align-items: flex-start; gap: 0.35rem;">
+                    <div style="display:flex;align-items:center;gap:0.5rem;">
+                        <i class="fas fa-calendar-check" style="color:#b85c00;"></i>
+                        <span style="color:#856404;font-weight:600;font-size:0.82rem;">There is a 5-day extension to the estimated date release. If it exceeds, please go to the Registrar's Office.</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:0.5rem;">
+                        <i class="fas fa-info-circle"></i>
+                        <span>For inquiries, please contact the Registrar's Office</span>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <!-- Request Detail Modal -->
+    <div class="modal fade queue-modal" id="requestDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-route me-2"></i>Request Progress</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="requestDetailBody">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/REQUEST/shared/js/csrf.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/REQUEST/shared/js/auth.js"></script>
+    <script src="/REQUEST/shared/js/escape.js"></script>
+    <script src="../script/dashboard.js?v=17"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+/* Student Module Styles - inherits from shared/css/theme.css */
+
+/* Profile Page */
+.profile-header {
+  background: var(--cces-card);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  border-radius: var(--cces-radius);
+  box-shadow: var(--cces-shadow);
+  border-left: 3px solid var(--cces-primary);
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--cces-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: var(--cces-primary);
+  margin: 0 auto 1rem;
+  border: 2px solid var(--cces-border);
+}
+
+.profile-content {
+  background: var(--cces-card);
+  border-radius: var(--cces-radius);
+  padding: 1.5rem;
+  box-shadow: var(--cces-shadow);
+  margin-bottom: 1.25rem;
+}
+
+.info-section {
+  margin-bottom: 1.5rem;
+}
+
+.info-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--cces-text);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-left: 3px solid var(--cces-primary);
+  padding-left: 0.75rem;
+  border-bottom: none;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--cces-border-light);
+  font-size: 0.85rem;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 400;
+  color: var(--cces-text-muted);
+}
+
+.info-value {
+  color: var(--cces-text);
+  font-weight: 500;
+}
+
+.back-btn {
+  background: var(--cces-primary-light);
+  color: var(--cces-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--cces-radius);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.15s;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+.back-btn:hover {
+  background: var(--cces-primary);
+  color: #fff;
+  text-decoration: none;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+}
+
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+  color: var(--cces-primary) !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+/* Cute "Submitting..." toast notification (lower-right) */
+.swal2-container.swal2-toast {
+  pointer-events: auto;
+}
+
+.swal2-container.swal2-toast .swal2-popup {
+  background: var(--cces-card, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(17, 24, 39, 0.18);
+  border: 1px solid var(--cces-border, #e2e8f0);
+  padding: 14px 18px;
+}
+
+.submit-loading-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 240px;
+  text-align: left;
+}
+
+.submit-loading-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--cces-text, #1a1a2e);
+}
+
+/* Mobile / phone-friendly (Android · iOS) toast sizing */
+@media (max-width: 480px) {
+  .swal2-container.swal2-toast {
+    padding: 0;
+    inset: auto 0.5rem 0.5rem auto;
+    transform: none !important;
+  }
+  .swal2-container.swal2-toast .swal2-popup {
+    margin: 0;
+    max-width: calc(100vw - 1rem);
+  }
+  .submit-loading-wrap {
+    min-width: 0;
+    width: 100%;
+    max-width: calc(100vw - 2.5rem);
+  }
+}
